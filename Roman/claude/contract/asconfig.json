@@ -1,0 +1,22 @@
+{
+  "extends": "assemblyscript/std/assembly.json",
+  "entries": ["src/index.ts"],
+  "options": {
+    "bindings": "esm",
+    "exportRuntime": false,
+    "runtime": "stub",
+    "use": ["abort=~lib/builtins/abort"],
+    "lib": ["node_modules/@btc-vision/btc-runtime/runtime"]
+  },
+  "targets": {
+    "debug": {
+      "sourceMap": true,
+      "debug": true
+    },
+    "release": {
+      "sourceMap": true,
+      "optimizeLevel": 3,
+      "shrinkLevel": 1
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "btc-price-oracle-contract",
+  "version": "1.0.0",
+  "description": "Bitcoin Price Oracle smart contract for OP_NET",
+  "scripts": {
+    "build": "asc src/index.ts --target release --outFile build/PriceOracle.wasm --textFile build/PriceOracle.wat --sourceMap --optimize",
+    "build:debug": "asc src/index.ts --target debug --outFile build/PriceOracle.debug.wasm --textFile build/PriceOracle.debug.wat --sourceMap",
+    "clean": "rm -rf build"
+  },
+  "dependencies": {
+    "@btc-vision/btc-runtime": "latest"
+  },
+  "devDependencies": {
+    "@btc-vision/transaction": "^1.7.31",
+    "@noble/hashes": "^1.8.0",
+    "assemblyscript": "latest",
+    "opnet": "^1.8.0"
+  }
+}
