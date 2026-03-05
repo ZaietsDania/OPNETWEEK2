@@ -20,7 +20,7 @@ A Bitcoin-native price oracle built on [OP_NET](https://opnet.org), pushing live
 
 | Field | Value |
 |---|---|
-| **Interaction TXID** | `cd3fbfa42cbb9b56ed3db3a07526131ce62dee07c4cf9a9306318871a5686e9f` |
+| **Interaction TXID** | `cd3fbfa42cbb9b56ed5db3a07526131ce62dee07c4cf9a9306318871a5686e9f` |
 | **Method** | Emergency Protocol — `signInteraction` + manual mempool.space broadcast |
 | **Result** | Oracle sync successful |
 
