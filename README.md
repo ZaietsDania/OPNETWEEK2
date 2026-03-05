@@ -16,6 +16,12 @@ A Bitcoin-native price oracle built on [OP_NET](https://opnet.org), pushing live
 
 ---
 
+## Live Demo
+
+**[https://frontend-sigma-one-35.vercel.app](https://frontend-sigma-one-35.vercel.app)**
+
+---
+
 ## Proof of Work — Week 2 Final
 
 | Field | Value |
