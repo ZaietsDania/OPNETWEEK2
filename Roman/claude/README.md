@@ -1,6 +1,36 @@
-# BTC/ORACLE — OP_NET Price Oracle
+# BTC Price Oracle — OP_NET
 
-A Bitcoin-native price oracle built on [OP_NET](https://opnet.org), pushing live BTC/USD spot prices on-chain via smart contract interaction.
+A Bitcoin-native price oracle built on OP_NET smart contracts. Fetches live BTC/USD spot prices from Binance API and pushes them on-chain via a contract deployed on Bitcoin Testnet.
+
+---
+
+## Proof of Work — Week 2 Final
+
+| Field | Value |
+|---|---|
+| **Interaction TXID** | `cd3fbfa42cbb9b56ed5db3a07526131ce62dee07c4cf9a9306318871a5686e9f` |
+| **Method** | Emergency Protocol (`signInteraction` + manual mempool.space broadcast) |
+| **Result** | Oracle sync successful |
+
+![Oracle Sync Screenshot](docs/demo/image_8291e2.jpg)
+
+---
+
+## Architecture
+
+- **Frontend:** React + Vite + TypeScript (Cyberpunk UI)
+- **Data Source:** Binance Public API
+- **On-chain:** OP_NET Smart Contract
+
+---
+
+## Project Structure
+
+```
+/contract    — OP_NET smart contract (AssemblyScript)
+/frontend    — Cyberpunk UI dashboard (React + Vite + TypeScript)
+/docs/demo   — Screenshots and proof of work
+```
 
 ---
 
@@ -16,26 +46,6 @@ A Bitcoin-native price oracle built on [OP_NET](https://opnet.org), pushing live
 
 ---
 
-## Proof of Work — Week 2 Final
-
-| Field | Value |
-|---|---|
-| **Interaction TXID** | `cd3fbfa42cbb9b56ed5db3a07526131ce62dee07c4cf9a9306318871a5686e9f` |
-| **Method** | Emergency Protocol — `signInteraction` + manual mempool.space broadcast |
-| **Result** | Oracle sync successful |
-
-![Oracle Sync Screenshot](docs/demo/image_8291e2.jpg)
-
----
-
-## Project Structure
-
-```
-/contract    — OP_NET smart contract (AssemblyScript)
-/frontend    — Cyberpunk UI dashboard (React + Vite + TypeScript)
-/docs/demo   — Screenshots and proof of work
-```
-
 ## Frontend — Quick Start
 
 ```bash
@@ -45,46 +55,6 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000)
-
----
-
-## Architecture
-
-```
-┌─────────────────────────────────────────────────────┐
-│                   Frontend (React)                   │
-│  ┌──────────────┐  ┌──────────────┐  ┌───────────┐ │
-│  │  PriceCard   │  │  PriceChart  │  │ SyncButton│ │
-│  │  Binance API │  │  Binance API │  │ OP Wallet │ │
-│  └──────────────┘  └──────────────┘  └───────────┘ │
-└─────────────────────────────────────────────────────┘
-         │                                    │
-         ▼                                    ▼
-   Binance Public API            window.opnet.web3.signInteraction
-   (spot + klines, no key)       + POST mempool.space/api/tx
-         │                                    │
-         ▼                                    ▼
-   Live BTC/USD price          PriceOracle.setPrice(uint256)
-                                on Bitcoin Testnet3
-```
-
-### Contract (`contract/src/index.ts`)
-- `setPrice(uint256)` — owner writes price scaled ×10⁸
-- `getPrice()` → `(uint256 price, uint256 lastUpdatedBlock)`
-- Compiled to WASM, deployed via OP_NET deploy transaction
-
-### Frontend (`frontend/src/`)
-- **`services/coinGecko.ts`** — Binance public API (spot + 1h klines)
-- **`services/contractService.ts`** — read via `btc_call` RPC; write via OP Wallet `signInteraction` → manual broadcast to mempool.space
-- **`components/PriceCard.tsx`** — live Binance card + on-chain oracle card
-- **`components/PriceChart.tsx`** — 24h price chart
-- **`components/SyncButton.tsx`** — one-click oracle sync
-
-### Emergency Broadcast Protocol
-The OP Wallet extension's internal Bitcoin node caches UTXOs as spent after failed broadcasts. The fix:
-1. Fetch confirmed UTXOs from mempool.space (`opt1…` → `tb1…` address conversion)
-2. Call `signInteraction` — wallet signs locally, does **not** broadcast
-3. POST raw funding + interaction tx hex directly to `mempool.space/api/tx`
 
 ---
 
