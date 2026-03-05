@@ -1,19 +1,18 @@
-# Ignore everything at the repo root, then whitelist only the project
+# Ignore everything at the repo root, then whitelist only the project folders
 /*
 !/.gitignore
-!/Roman/
+!/README.md
+!/contract/
+!/frontend/
+!/docs/
 
-# Inside Roman/ — ignore everything except claude/
-Roman/*
-!Roman/claude/
-
-# Inside the project — ignore generated / private artefacts
-Roman/claude/contract/node_modules/
-Roman/claude/contract/build/
-Roman/claude/contract/.env
-Roman/claude/contract/derive-wallet.cjs
-Roman/claude/contract/wallet-gen.mjs
-Roman/claude/frontend/node_modules/
-Roman/claude/frontend/dist/
-Roman/claude/frontend/.env
-Roman/claude/.claude/
+# Ignore generated / private artefacts
+contract/node_modules/
+contract/build/
+contract/.env
+contract/derive-wallet.cjs
+contract/wallet-gen.mjs
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.vite/

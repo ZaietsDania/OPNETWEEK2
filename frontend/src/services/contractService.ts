@@ -77,8 +77,6 @@ interface MempoolUTXO {
 }
 
 async function fetchUTXOs(opnetAddress: string): Promise<UTXO[]> {
-    // Convert opt1… → tb1… for mempool.space lookup; scriptPubKey comes back
-    // from the raw tx vout so it is always the native Bitcoin format.
     const tb1Address = toStandardAddress(opnetAddress);
     console.log('[fetchUTXOs] checking mempool.space for:', tb1Address);
     console.log('[fetchUTXOs] mempool link →', `${MEMPOOL_BASE}/address/${tb1Address}`);
@@ -103,7 +101,6 @@ async function fetchUTXOs(opnetAddress: string): Promise<UTXO[]> {
         if (!txRes.ok) { console.warn('[fetchUTXOs] skip (tx fetch failed):', u.txid); continue; }
         const tx   = await txRes.json();
         const vout = tx.vout[u.vout];
-        // Pass scriptPubKey exactly as mempool returns it (native Bitcoin format)
         result.push({
             transactionId: u.txid,
             outputIndex:   u.vout,
@@ -155,7 +152,7 @@ export async function pushOraclePrice(usdPrice: number): Promise<string> {
     if (!accounts?.length) throw new Error('No accounts in OP Wallet');
     console.log('[pushOraclePrice] account (opt1):', accounts[0]);
 
-    // 2. Fetch confirmed UTXOs — opt1 converted to tb1 internally
+    // 2. Fetch confirmed UTXOs
     const utxos = await fetchUTXOs(accounts[0]);
     console.log('[pushOraclePrice] UTXOs ready:', utxos.length);
 
@@ -179,8 +176,7 @@ export async function pushOraclePrice(usdPrice: number): Promise<string> {
         network,
     };
 
-    // 4a. Primary path: sign locally → we broadcast to mempool.space
-    //     (bypasses wallet's stale internal node)
+    // 4a. Primary path: sign locally → broadcast to mempool.space
     try {
         console.log('[pushOraclePrice] trying signInteraction + manual broadcast …');
         const signed = await opnet.web3.signInteraction({ ...baseParams, feeRate: 100 });
@@ -200,7 +196,7 @@ export async function pushOraclePrice(usdPrice: number): Promise<string> {
         console.warn('[pushOraclePrice] falling back to signAndBroadcastInteraction feeRate=100 …');
     }
 
-    // 4b. Fallback: let wallet sign AND broadcast with feeRate 100
+    // 4b. Fallback: let wallet sign AND broadcast
     const [fundingTx, interactionTx] = await opnet.web3.signAndBroadcastInteraction({
         ...baseParams, feeRate: 100,
     });

@@ -20,11 +20,31 @@ A Bitcoin-native price oracle built on [OP_NET](https://opnet.org), pushing live
 
 | Field | Value |
 |---|---|
-| **Interaction TXID** | `cd3fbfa42cbb9b56ed5db3a07526131ce62dee07c4cf9a9306318871a5686e9f` |
+| **Interaction TXID** | `cd3fbfa42cbb9b56ed3db3a07526131ce62dee07c4cf9a9306318871a5686e9f` |
 | **Method** | Emergency Protocol — `signInteraction` + manual mempool.space broadcast |
 | **Result** | Oracle sync successful |
 
-![Oracle Sync Screenshot](Roman/claude/docs/demo/image_8291e2.jpg)
+![Oracle Sync Screenshot](docs/demo/image_8291e2.jpg)
+
+---
+
+## Project Structure
+
+```
+/contract    — OP_NET smart contract (AssemblyScript)
+/frontend    — Cyberpunk UI dashboard (React + Vite + TypeScript)
+/docs/demo   — Screenshots and proof of work
+```
+
+## Frontend — Quick Start
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000)
 
 ---
 
@@ -58,6 +78,7 @@ A Bitcoin-native price oracle built on [OP_NET](https://opnet.org), pushing live
 - **`services/contractService.ts`** — read via `btc_call` RPC; write via OP Wallet `signInteraction` → manual broadcast to mempool.space
 - **`components/PriceCard.tsx`** — live Binance card + on-chain oracle card
 - **`components/PriceChart.tsx`** — 24h price chart
+- **`components/SyncButton.tsx`** — one-click oracle sync
 
 ### Emergency Broadcast Protocol
 The OP Wallet extension's internal Bitcoin node caches UTXOs as spent after failed broadcasts. The fix:
@@ -102,3 +123,21 @@ VITE_CONTRACT_ADDRESS=opt1sqp630pm5450ratxnd55rwyjmq226gy2c5yayqfdg
 VITE_CONTRACT_HEX=0x74f381ba78cd46c6683969a41e11dbf83f62861faa675299c4091f360763a2c8
 VITE_OPNET_RPC_URL=https://testnet.opnet.org
 ```
+
+## Features
+
+- Live BTC/USD spot price via Binance public API (no key required)
+- 24-hour price chart with neon SVG rendering
+- One-click oracle sync — pushes price on-chain via OP Wallet
+- Cyberpunk fintech UI with Orbitron + Share Tech Mono fonts
+- Auto-refresh every 30s, oracle retry every 15s
+
+## Stack
+
+| Layer    | Tech                              |
+|----------|-----------------------------------|
+| Contract | OP_NET / AssemblyScript           |
+| Frontend | React 18, Vite 5, TypeScript 5    |
+| Wallet   | OP Wallet (`window.opnet`)        |
+| Price    | Binance REST API                  |
+| Network  | Bitcoin Testnet3 / OP_NET         |
