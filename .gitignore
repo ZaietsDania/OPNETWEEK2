@@ -5,6 +5,11 @@
 !/contract/
 !/frontend/
 !/docs/
+!/Roman/
+
+# Inside Roman/ — ignore everything except claude/
+Roman/*
+!Roman/claude/
 
 # Ignore generated / private artefacts
 contract/node_modules/
@@ -16,3 +21,10 @@ frontend/node_modules/
 frontend/dist/
 frontend/.env
 frontend/.vite/
+Roman/claude/contract/node_modules/
+Roman/claude/contract/build/
+Roman/claude/contract/.env
+Roman/claude/frontend/node_modules/
+Roman/claude/frontend/dist/
+Roman/claude/frontend/.env
+Roman/claude/frontend/.vite/
